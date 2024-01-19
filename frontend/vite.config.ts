@@ -13,6 +13,7 @@ export default defineConfig({
         taskpane: resolve(__dirname, "src/taskpane/taskpane.html"),
       },
     },
+    outDir: "../dist",
   },
   esbuild: {
     minify: false,
