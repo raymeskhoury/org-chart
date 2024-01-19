@@ -1,0 +1,37 @@
+{
+  "extends": "./node_modules/gts/",
+  "parserOptions": {
+    "project": ["./frontend/tsconfig.json"]
+  },
+  "ignorePatterns": ["types/*"],
+  "rules": {
+    "quotes": ["warn", "double"],
+    "jsx-quotes": ["warn", "prefer-double"],
+    "@typescript-eslint/ban-ts-comment": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {"allowExpressions": true}
+    ],
+    "@typescript-eslint/strict-boolean-expressions": [
+      "error",
+      {
+        "allowString": false,
+        "allowNumber": false
+      }
+    ],
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "MethodDefinition[kind='set']",
+        "message": "Property setters are not allowed"
+      },
+      {
+        "selector": "MethodDefinition[kind='get']",
+        "message": "Property getters are not allowed"
+      }
+    ]
+  }
+}

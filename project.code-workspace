@@ -1,0 +1,31 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "omnisharp.enableRoslynAnalyzers": true,
+    "git.ignoreLimitWarning": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll.stylelint": "explicit"
+    },
+    "editor.insertSpaces": true,
+    "omnisharp.enableEditorConfigSupport": true,
+    "editor.tabSize": 2,
+    "prettier.printWidth": 80,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[csharp]": {
+      "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "[css]": {
+      "editor.defaultFormatter": null
+    },
+    "eslint.validate": ["typescript", "typescriptreact"],
+
+    "files.eol": "\n",
+    "css.validate": false
+  }
+}

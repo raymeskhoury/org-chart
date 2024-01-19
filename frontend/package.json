@@ -1,0 +1,31 @@
+{
+  "name": "template",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build-dev-watch": "tsc && vite build --watch",
+    "build-dev": "tsc && vite build --mode development",
+    "preview": "vite preview",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm.cmd run compile",
+    "pretest": "npm.cmd run compile",
+    "posttest": "npm.cmd run lint"
+  },
+  "devDependencies": {
+    "gts": "^4.0.0",
+    "stylelint": "^14.9.1",
+    "stylelint-config-idiomatic-order": "^10.0.0",
+    "stylelint-config-standard": "^26.0.0",
+    "stylelint-order": "^5.0.0",
+    "typescript": "^4.6.3",
+    "vite": "^2.9.9"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
