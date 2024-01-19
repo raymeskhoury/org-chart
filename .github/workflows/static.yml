@@ -33,4 +33,4 @@ jobs:
         uses: actions/checkout@v4
       - name: Vite Github Pages Deployer
         id: deployment
-        uses: skywarth/vite-github-pages-deployer@master
+        uses: skywarth/vite-github-pages-deployer@58381aa63b5fc1056b3953a15c63e2b010c42901
