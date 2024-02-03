@@ -1,7 +1,7 @@
 {
   "extends": "./node_modules/gts/",
   "parserOptions": {
-    "project": ["./frontend/tsconfig.json"]
+    "project": ["./tsconfig.json"]
   },
   "ignorePatterns": ["types/*"],
   "rules": {

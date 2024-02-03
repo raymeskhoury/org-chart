@@ -1,4 +1,3 @@
 {
-    "editor.formatOnSave": true,
-    "omnisharp.enableRoslynAnalyzers": true
+  "editor.formatOnSave": true
 }

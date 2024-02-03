@@ -1,2 +1,4 @@
 build/
 custom.d.ts
+vite.config.ts
+src/tree/org.chart.ts

@@ -1,24 +1,44 @@
+import * as fs from "fs";
 import {resolve} from "path";
 import {defineConfig} from "vite";
+import {viteStaticCopy} from "vite-plugin-static-copy";
 
-// https://vitejs.dev/config/
-export default defineConfig({
+let config = {
   root: "src",
-  plugins: [],
+  resolve: {
+    alias: [
+      {
+        find: /\/assets\/office-js\/(.+)/,
+        replacement: `../node_modules/@microsoft/office-js/dist/$1`,
+      },
+    ],
+  },
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: "../node_modules/@microsoft/office-js/dist/*",
+          dest: "../dist/assets/office-js",
+        },
+      ],
+    }),
+  ],
+  server: {
+    port: 3000,
+    https: {
+      key: fs.readFileSync("./.cert/key.pem"),
+      cert: fs.readFileSync("./.cert/cert.pem"),
+    },
+  },
   build: {
-    minify: false,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "src/index.html"),
-        taskpane: resolve(__dirname, "src/taskpane/taskpane.html"),
+        main: resolve(__dirname, "src/taskpane.html"),
       },
     },
     outDir: "../dist",
   },
-  esbuild: {
-    minify: false,
-    minifyIdentifiers: false,
-    minifySyntax: false,
-    minifyWhitespace: false,
-  },
-});
+};
+
+// https://vitejs.dev/config/
+export default defineConfig(config);

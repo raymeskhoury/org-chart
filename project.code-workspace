@@ -26,6 +26,7 @@
     "eslint.validate": ["typescript", "typescriptreact"],
 
     "files.eol": "\n",
-    "css.validate": false
+    "css.validate": false,
+    "typescript.preferences.includePackageJsonAutoImports": "on"
   }
 }

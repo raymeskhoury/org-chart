@@ -1,0 +1,34 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!doctype html>
+<html>
+  <head>
+    <script src="/assets/office-js/office.js"></script>
+    <!-- <link rel="stylesheet" href="/assets/shoelace/themes/light.css" /> -->
+
+    <script type="module" src="/taskpane.ts"></script>
+    <style>
+      :root {
+        /* Changes the primary theme color to purple using primitives */
+        --sl-focus-ring-width: 1px !important;
+        --sl-focus-ring-offset: 0px !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p>
+      <button id="helloButton">Test</button>
+      Thisssssssssssttf add-in will set cell A1 to the value 'Hello world!'.
+    </p>
+    <sl-dialog label="Dialog" class="dialog-overview">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      <sl-button slot="footer" variant="primary">Close</sl-button>
+    </sl-dialog>
+
+    <sl-button>Open Dialog</sl-button>
+
+    <div class="chart-container"></div>
+    <div id="fontResizer"></div>
+    <iframe id="print"></iframe>
+  </body>
+</html>
