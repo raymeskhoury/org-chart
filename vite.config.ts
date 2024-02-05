@@ -5,20 +5,28 @@ import {viteStaticCopy} from "vite-plugin-static-copy";
 
 let config = {
   root: "src",
-  resolve: {
-    alias: [
-      {
-        find: /\/assets\/office-js\/(.+)/,
-        replacement: `../node_modules/@microsoft/office-js/dist/$1`,
-      },
-    ],
-  },
+  // resolve: {
+  //   alias: [
+  //     {
+  //       find: /\/assets\/office-js\/(.+)/,
+  //       replacement: `../node_modules/@microsoft/office-js/dist/$1`,
+  //     },
+  //     {
+  //       find: /\/assets\/icons\/(.+)/,
+  //       replacement: `../node_modules/@shoelace-style/shoelace/dist/assets/icons/$1`,
+  //     },
+  //   ],
+  // },
   plugins: [
     viteStaticCopy({
       targets: [
         {
           src: "../node_modules/@microsoft/office-js/dist/*",
-          dest: "../dist/assets/office-js",
+          dest: "assets/office-js",
+        },
+        {
+          src: "../node_modules/@shoelace-style/shoelace/dist/assets/icons/*",
+          dest: "assets/icons/",
         },
       ],
     }),

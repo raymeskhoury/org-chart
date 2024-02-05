@@ -1,30 +1,35 @@
 import "@shoelace-style/shoelace/dist/components/button/button";
+import "@shoelace-style/shoelace/dist/components/color-picker/color-picker";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog";
-import SlDialog from "@shoelace-style/shoelace/dist/components/dialog/dialog";
+import "@shoelace-style/shoelace/dist/components/dropdown/dropdown";
+import "@shoelace-style/shoelace/dist/components/icon/icon";
+import "@shoelace-style/shoelace/dist/components/menu-item/menu-item";
+import "@shoelace-style/shoelace/dist/components/menu/menu";
 import "@shoelace-style/shoelace/dist/themes/dark.css";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import * as d3 from "d3";
 import {OrgChart} from "d3-org-chart";
 import "./style.css";
 
-const dialog = document.querySelector(".dialog-overview") as SlDialog;
-const openButton = dialog!.nextElementSibling;
-const closeButton = dialog!.querySelector('sl-button[slot="footer"]');
-
-openButton!.addEventListener("click", () => dialog!.show());
-closeButton!.addEventListener("click", () => dialog!.hide());
-
 let chart: OrgChart<unknown>;
 const fontSizes = new Map();
 
-document.addEventListener("DOMContentLoaded", () => {});
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("printButton")!.onclick = sayHello;
+  document.getElementById("fitButton")!.addEventListener("click", () => {
+    chart.render();
+    chart.fit();
+  });
+  document.getElementById("expandButton")!.addEventListener("click", () => {
+    chart.expandAll();
+  });
+});
 
 Office.onReady(info => {
   // Check that we loaded into Excel
   // if (info.host === Office.HostType.Excel) {
   // }
 });
-document!.getElementById("helloButton")!.onclick = sayHello;
 
 function doesOverflow(el: HTMLElement): boolean {
   return el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;

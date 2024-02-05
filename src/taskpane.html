@@ -7,25 +7,86 @@
 
     <script type="module" src="/taskpane.ts"></script>
     <style>
+      :not(:defined) {
+        visibility: hidden;
+      }
       :root {
         /* Changes the primary theme color to purple using primitives */
         --sl-focus-ring-width: 1px !important;
         --sl-focus-ring-offset: 0px !important;
+        /* --sl-color-neutral-300: transparent !important; */
+        /* --sl-input-border-radius-small: var(--sl-border-radius-) !important; */
+
+        --sl-color-primary-50: rgb(249 249 250) !important;
+        --sl-color-primary-100: rgb(234 236 239) !important;
+        --sl-color-primary-200: rgb(218 222 227) !important;
+        --sl-color-primary-300: rgb(201 207 214) !important;
+        --sl-color-primary-400: rgb(178 187 197) !important;
+        --sl-color-primary-500: rgb(149 161 175) !important;
+        --sl-color-primary-600: rgb(118 133 151) !important;
+        --sl-color-primary-700: rgb(92 110 131) !important;
+        --sl-color-primary-800: rgb(71 91 115) !important;
+        --sl-color-primary-900: rgb(41 65 92) !important;
+        --sl-color-primary-950: rgb(13 39 71) !important;
+        --sl-font-sans: "Inter", sans-serif !important;
+        --sl-button-font-size-small: var(--sl-font-size-small) !important;
       }
     </style>
   </head>
 
   <body>
-    <p>
+    <div class="toolbar">
+      <sl-button size="small" id="updateButton">
+        <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
+        Update
+      </sl-button>
+      <sl-dropdown>
+        <sl-button size="small" slot="trigger" caret>
+          <sl-icon slot="prefix" name="palette"></sl-icon>
+          Style
+        </sl-button>
+        <div class="style-container" class="menu">
+          <div class="style-container-item">
+            <div class="style-container-item-label">test</div>
+            <sl-color-picker label="Select a color"></sl-color-picker>
+          </div>
+        </div>
+      </sl-dropdown>
+      <sl-dropdown>
+        <sl-button size="small" slot="trigger" caret>
+          <sl-icon slot="prefix" name="download"></sl-icon>
+          Export
+        </sl-button>
+        <sl-menu class="menu">
+          <sl-menu-item value="cut">PNG</sl-menu-item>
+          <sl-menu-item value="copy">SVG</sl-menu-item>
+          <sl-menu-item value="paste">PDF</sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+
+      <sl-button size="small" id="printButton">
+        <sl-icon slot="prefix" name="printer"></sl-icon>
+        Print
+      </sl-button>
+      <sl-button size="small" id="fitButton">
+        <sl-icon slot="prefix" name="arrows-angle-expand"></sl-icon>
+        Fit
+      </sl-button>
+      <sl-button size="small" id="expandButton">
+        <sl-icon slot="prefix" name="plus-lg"></sl-icon>
+        Expand all
+      </sl-button>
+    </div>
+    <!-- <p>
       <button id="helloButton">Test</button>
       Thisssssssssssttf add-in will set cell A1 to the value 'Hello world!'.
     </p>
     <sl-dialog label="Dialog" class="dialog-overview">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      <sl-button slot="footer" variant="primary">Close</sl-button>
-    </sl-dialog>
+      <sl-button size="small" slot="footer" variant="primary">Close</sl-button>
+    </sl-dialog> -->
 
-    <sl-button>Open Dialog</sl-button>
+    <!-- <sl-button size="small">Open Dialog</sl-button> -->
 
     <div class="chart-container"></div>
     <div id="fontResizer"></div>
