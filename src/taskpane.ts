@@ -599,31 +599,30 @@ async function exportImage(type: ExportType): Promise<void> {
 
 function drawChart(data: OrgEntry[]): void {
   console.error(data);
-  d3.csv("./assets/data-oracle.csv").then(oldData => {
-    OrgChart.prototype.diagonal = function (s, t, m, offsets = {sy: 0}) {
-      const x = s.x;
-      let y = s.y;
+  OrgChart.prototype.diagonal = function (s, t, m, offsets = {sy: 0}) {
+    const x = s.x;
+    let y = s.y;
 
-      const ex = t.x;
-      const ey = t.y;
+    const ex = t.x;
+    const ey = t.y;
 
-      const mx = m !== null && m !== undefined && m.x !== null ? m.x : x; // This is a changed line
-      const my = m !== null && m !== undefined && m.y !== null ? m.y : y; // This also is a changed line
+    const mx = m !== null && m !== undefined && m.x !== null ? m.x : x; // This is a changed line
+    const my = m !== null && m !== undefined && m.y !== null ? m.y : y; // This also is a changed line
 
-      const xrvs = ex - x < 0 ? -1 : 1;
-      const yrvs = ey - y < 0 ? -1 : 1;
+    const xrvs = ex - x < 0 ? -1 : 1;
+    const yrvs = ey - y < 0 ? -1 : 1;
 
-      y += offsets.sy;
+    y += offsets.sy;
 
-      const rdef = 0;
-      let r = Math.abs(ex - x) / 2 < rdef ? Math.abs(ex - x) / 2 : rdef;
+    const rdef = 0;
+    let r = Math.abs(ex - x) / 2 < rdef ? Math.abs(ex - x) / 2 : rdef;
 
-      r = Math.abs(ey - y) / 2 < r ? Math.abs(ey - y) / 2 : r;
+    r = Math.abs(ey - y) / 2 < r ? Math.abs(ey - y) / 2 : r;
 
-      const h = Math.abs(ey - y) / 2 - r;
-      const w = Math.abs(ex - x) - r * 2;
-      //w=0;
-      const path = `
+    const h = Math.abs(ey - y) / 2 - r;
+    const w = Math.abs(ex - x) - r * 2;
+    //w=0;
+    const path = `
                 M ${mx} ${my}
                 L ${x} ${my}
                 L ${x} ${y}
@@ -637,34 +636,34 @@ function drawChart(data: OrgEntry[]): void {
                 } ${ex} ${ey - h * yrvs}
                 L ${ex} ${ey}
      `;
-      return path;
-    };
-    chart = new OrgChart();
+    return path;
+  };
+  chart = new OrgChart();
 
-    chart
-      .nodeHeight(d => 120)
-      .nodeWidth(d => 160)
-      .childrenMargin(d => 50)
-      .compactMarginBetween(d => 50)
-      .compactMarginPair(d => 50)
-      .neighbourMargin((a, b) => 30)
-      .linkUpdate(function (d, i, arr) {
-        // @ts-ignore
-        d3.select(this)
-          .attr("stroke", d => "#000000")
-          .attr("stroke-width", d => 2);
-      })
+  chart
+    .nodeHeight(d => 120)
+    .nodeWidth(d => 160)
+    .childrenMargin(d => 50)
+    .compactMarginBetween(d => 50)
+    .compactMarginPair(d => 50)
+    .neighbourMargin((a, b) => 30)
+    .linkUpdate(function (d, i, arr) {
+      // @ts-ignore
+      d3.select(this)
+        .attr("stroke", d => "#000000")
+        .attr("stroke-width", d => 2);
+    })
 
-      .nodeContent((d, i, arr, state) => {
-        const a = d as any;
-        let fontSize = fontSizes.get(d.id);
-        const fontColor = pickTextColorBasedOnBgColor(
-          a.data.color,
-          "#FFFFFF",
-          "#000000"
-        );
-        function nodeHtml(size: number): string {
-          return `
+    .nodeContent((d, i, arr, state) => {
+      const a = d as any;
+      let fontSize = fontSizes.get(d.id);
+      const fontColor = pickTextColorBasedOnBgColor(
+        a.data.color,
+        "#FFFFFF",
+        "#000000"
+      );
+      function nodeHtml(size: number): string {
+        return `
                 <div style='width:${a.width}px;height:${d.height}px;' >
                   <div style="display: flex; flex-direction:column; justify-content: center;  font-family: 'Inter', sans-serif;background-color:${
                     a.data.color
@@ -681,54 +680,53 @@ function drawChart(data: OrgEntry[]): void {
                     </div>
                   </div>
                 </div>`;
-        }
-        if (fontSize === undefined) {
-          fontSize = 25;
+      }
+      if (fontSize === undefined) {
+        fontSize = 25;
 
-          const resizer = document.getElementById("font-resizer");
+        const resizer = document.getElementById("font-resizer");
+        resizer!.innerHTML = nodeHtml(fontSize);
+        while (
+          doesOverflow(
+            resizer!.firstElementChild!.firstElementChild!
+              .firstElementChild! as HTMLElement
+          ) &&
+          fontSize > 5
+        ) {
+          fontSize--;
           resizer!.innerHTML = nodeHtml(fontSize);
-          while (
-            doesOverflow(
-              resizer!.firstElementChild!.firstElementChild!
-                .firstElementChild! as HTMLElement
-            ) &&
-            fontSize > 5
-          ) {
-            fontSize--;
-            resizer!.innerHTML = nodeHtml(fontSize);
-          }
-          fontSizes.set(d.id, fontSize);
         }
+        fontSizes.set(d.id, fontSize);
+      }
 
-        return nodeHtml(fontSize);
-      })
-      .buttonContent(({node, state}) => {
-        function top(d: boolean): string {
-          return d
-            ? `<div style="display:flex;"><span style="align-items:center;display:flex;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      return nodeHtml(fontSize);
+    })
+    .buttonContent(({node, state}) => {
+      function top(d: boolean): string {
+        return d
+          ? `<div style="display:flex;"><span style="align-items:center;display:flex;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M11.457 8.07005L3.49199 16.4296C3.35903 16.569 3.28485 16.7543 3.28485 16.9471C3.28485 17.1398 3.35903 17.3251 3.49199 17.4646L3.50099 17.4736C3.56545 17.5414 3.64304 17.5954 3.72904 17.6324C3.81504 17.6693 3.90765 17.6883 4.00124 17.6883C4.09483 17.6883 4.18745 17.6693 4.27344 17.6324C4.35944 17.5954 4.43703 17.5414 4.50149 17.4736L12.0015 9.60155L19.4985 17.4736C19.563 17.5414 19.6405 17.5954 19.7265 17.6324C19.8125 17.6693 19.9052 17.6883 19.9987 17.6883C20.0923 17.6883 20.1849 17.6693 20.2709 17.6324C20.3569 17.5954 20.4345 17.5414 20.499 17.4736L20.508 17.4646C20.641 17.3251 20.7151 17.1398 20.7151 16.9471C20.7151 16.7543 20.641 16.569 20.508 16.4296L12.543 8.07005C12.4729 7.99653 12.3887 7.93801 12.2954 7.89801C12.202 7.85802 12.1015 7.8374 12 7.8374C11.8984 7.8374 11.798 7.85802 11.7046 7.89801C11.6113 7.93801 11.527 7.99653 11.457 8.07005Z" fill="#000000" stroke="#000000"/>
               </svg></span><span style="margin-left:1px;color:#000000">${
                 (node.data as any)._directSubordinatesPaging
               } </span></div>
               `
-            : `<div style="display:flex;"><span style="align-items:center;display:flex;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          : `<div style="display:flex;"><span style="align-items:center;display:flex;"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M19.497 7.98903L12 15.297L4.503 7.98903C4.36905 7.85819 4.18924 7.78495 4.002 7.78495C3.81476 7.78495 3.63495 7.85819 3.501 7.98903C3.43614 8.05257 3.38462 8.12842 3.34944 8.21213C3.31427 8.29584 3.29615 8.38573 3.29615 8.47653C3.29615 8.56733 3.31427 8.65721 3.34944 8.74092C3.38462 8.82463 3.43614 8.90048 3.501 8.96403L11.4765 16.74C11.6166 16.8765 11.8044 16.953 12 16.953C12.1956 16.953 12.3834 16.8765 12.5235 16.74L20.499 8.96553C20.5643 8.90193 20.6162 8.8259 20.6517 8.74191C20.6871 8.65792 20.7054 8.56769 20.7054 8.47653C20.7054 8.38537 20.6871 8.29513 20.6517 8.21114C20.6162 8.12715 20.5643 8.05112 20.499 7.98753C20.3651 7.85669 20.1852 7.78345 19.998 7.78345C19.8108 7.78345 19.6309 7.85669 19.497 7.98753V7.98903Z" fill="#000000" stroke="#000000"/>
               </svg></span><span style="margin-left:1px;color:#000000">${
                 (node.data as any)._directSubordinatesPaging
               } </span></div>
           `;
-        }
-        return `<div style="border:1px solid #000000;border-radius:3px;padding: 3px 5px 1px 5px;font-size:12px;margin:auto auto;background-color:white"> ${top(
-          node.children !== undefined && node.children !== null
-        )}  </div>`;
-      })
-      .container(".chart-container")
-      .svgHeight(containerElement.clientHeight);
+      }
+      return `<div style="border:1px solid #000000;border-radius:3px;padding: 3px 5px 1px 5px;font-size:12px;margin:auto auto;background-color:white"> ${top(
+        node.children !== undefined && node.children !== null
+      )}  </div>`;
+    })
+    .container(".chart-container")
+    .svgHeight(containerElement.clientHeight);
 
-    window.addEventListener("resize", () => {
-      chart.svgHeight(containerElement.clientHeight);
-    });
-
-    renderChart(data);
+  window.addEventListener("resize", () => {
+    chart.svgHeight(containerElement.clientHeight);
   });
+
+  renderChart(data);
 }
