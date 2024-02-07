@@ -9,10 +9,15 @@ import "@shoelace-style/shoelace/dist/components/menu-item/menu-item";
 import "@shoelace-style/shoelace/dist/components/menu/menu";
 import "@shoelace-style/shoelace/dist/themes/dark.css";
 import "@shoelace-style/shoelace/dist/themes/light.css";
+import {setBasePath} from "@shoelace-style/shoelace/dist/utilities/base-path";
 import * as d3 from "d3";
 import {OrgChart} from "d3-org-chart";
 import Papa from "papaparse";
 import "./style.css";
+
+const href = window.location.href;
+const dir = href.substring(0, href.lastIndexOf("/")) + "/";
+setBasePath(dir);
 
 enum ExportType {
   Svg,

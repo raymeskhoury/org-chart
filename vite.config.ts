@@ -5,6 +5,7 @@ import {viteStaticCopy} from "vite-plugin-static-copy";
 
 let config: UserConfig = {
   root: "src",
+  base: "",
   plugins: [
     mkcert(),
     viteStaticCopy({
