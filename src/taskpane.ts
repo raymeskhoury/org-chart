@@ -366,8 +366,8 @@ async function insertTemplate(): Promise<string> {
       return;
     }
 
-    const tableRange = range.getCell(0, 0).getResizedRange(0, 4);
-    const dataRange = tableRange.getResizedRange(templateData.length, 0);
+    const headerRange = range.getCell(0, 0).getResizedRange(0, 4);
+    const dataRange = headerRange.getResizedRange(templateData.length, 0);
     dataRange.load("valueTypes");
     await context.sync();
     for (let i = 0; i < dataRange.valueTypes.length; ++i) {
@@ -381,17 +381,14 @@ async function insertTemplate(): Promise<string> {
 
     let table: Excel.Table;
     try {
-      table = sheet.tables.add(tableRange, true /*hasHeaders*/);
+      table = sheet.tables.add(dataRange, true /*hasHeaders*/);
       table.getHeaderRowRange().values = [
         ["ID", "Manager ID", "Name", "Position", "Background Colour"],
       ];
-      table.rows.add(
-        undefined /*add rows to the end of the table*/,
-        templateData
-      );
+      const body = table.getDataBodyRange();
+      body.values = templateData;
 
       table.getRange().format.fill.clear();
-      const body = table.getDataBodyRange();
 
       for (let i = 0; i < templateData.length; ++i) {
         for (let j = 0; j < templateData[i].length; ++j) {
