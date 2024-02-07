@@ -1,10 +1,34 @@
 :root {
   --sl-font-size-medium: var(--sl-button-font-size-small);
   --sl-font-weight-normal: var(--sl-font-weight-semibold);
+
+  width: 100%;
+  height: 100%;
+  user-select: none; 
 }
 
 body {
-  margin: 0
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: white;
+  color: var(--sl-color-neutral-700);
+  font-family: var(--sl-font-sans);
+  font-size: var(--sl-font-size-medium);
+  font-weight: var(--sl-font-weight-normal);
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  min-width: 550px;
+  height: 100%;
+  flex-direction: column
+}
+
+.chart-container {
+  overflow: hidden;
+  height: calc(100% - 34px);
 }
 
 .toolbar {
@@ -13,22 +37,19 @@ body {
   column-gap: 5px;
 }
 
-.style-container {
-  padding: var(--sl-spacing-x-small);
-  border: solid var(--sl-panel-border-width) var(--sl-panel-border-color);
-  border-radius: var(--sl-border-radius-medium);
-  color: var(--sl-color-neutral-700);
-  font-family: var(--sl-font-sans);
-  font-size: var(--sl-font-size-medium);
-  font-weight: var(--sl-font-weight-normal);
-}
-
-.style-container-item {
-  display:flex;
-  align-items: center;
-  padding: var(--sl-spacing-2x-small) var(--sl-spacing-2x-small);
-}
-
 .menu {
   min-width: 110px;
+}
+
+.helper-elements {
+  position:absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+#templateDataDialogError, #chartErrorDialogMessage {
+  margin-top: 20px;
+  color: red;
 }

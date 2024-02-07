@@ -20,8 +20,8 @@
   </Hosts>
   <DefaultSettings>
     <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
-    <RequestedWidth>500</RequestedWidth>
-    <RequestedHeight>500</RequestedHeight>
+    <RequestedWidth>700</RequestedWidth>
+    <RequestedHeight>400</RequestedHeight>
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">

@@ -1,23 +1,12 @@
-import * as fs from "fs";
 import {resolve} from "path";
-import {defineConfig} from "vite";
+import {UserConfig, defineConfig} from "vite";
+import mkcert from "vite-plugin-mkcert";
 import {viteStaticCopy} from "vite-plugin-static-copy";
 
-let config = {
+let config: UserConfig = {
   root: "src",
-  // resolve: {
-  //   alias: [
-  //     {
-  //       find: /\/assets\/office-js\/(.+)/,
-  //       replacement: `../node_modules/@microsoft/office-js/dist/$1`,
-  //     },
-  //     {
-  //       find: /\/assets\/icons\/(.+)/,
-  //       replacement: `../node_modules/@shoelace-style/shoelace/dist/assets/icons/$1`,
-  //     },
-  //   ],
-  // },
   plugins: [
+    mkcert(),
     viteStaticCopy({
       targets: [
         {
@@ -33,10 +22,7 @@ let config = {
   ],
   server: {
     port: 3000,
-    https: {
-      key: fs.readFileSync("./.cert/key.pem"),
-      cert: fs.readFileSync("./.cert/cert.pem"),
-    },
+    https: {},
   },
   build: {
     rollupOptions: {
