@@ -17,7 +17,7 @@
     <Host Name="Workbook"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://raymeskhoury.github.io/org-chart/taskpane.html"/>
+    <SourceLocation DefaultValue="https://raymeskhoury.github.io/org-chart/index.html"/>
     <RequestedWidth>700</RequestedWidth>
     <RequestedHeight>400</RequestedHeight>
   </DefaultSettings>

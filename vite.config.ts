@@ -28,7 +28,7 @@ let config: UserConfig = {
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, "src/taskpane.html"),
+        main: resolve(__dirname, "src/index.html"),
       },
     },
     outDir: "../dist",

@@ -17,7 +17,7 @@
     <Host Name="Workbook"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+    <SourceLocation DefaultValue="https://localhost:3000/index.html"/>
     <RequestedWidth>700</RequestedWidth>
     <RequestedHeight>400</RequestedHeight>
   </DefaultSettings>
