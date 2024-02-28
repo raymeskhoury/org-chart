@@ -26,30 +26,13 @@ body {
   flex-direction: column
 }
 
-.chart-container {
-  overflow: hidden;
-  height: calc(100% - 34px);
-}
 
-.toolbar {
-  display: flex;
-  padding: 2px;
-  column-gap: 5px;
-}
-
-.menu {
-  min-width: 110px;
-}
-
-.helper-elements {
-  position:absolute;
-  top: 0;
-  width: 0;
-  height: 0;
-  visibility: hidden;
-}
 
 #templateDataDialogError, #chartErrorDialogMessage {
   margin-top: 20px;
   color: red;
+}
+
+#orgChart {
+  height: calc(100% - 34px);
 }

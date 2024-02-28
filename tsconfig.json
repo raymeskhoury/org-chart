@@ -2,7 +2,7 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "target": "ESNext",
-    "useDefineForClassFields": true,
+    // "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
@@ -20,7 +20,11 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitOverride": true,
-    "types": ["office-js"]
+    "types": ["office-js"],
+
+    // Remove these when esbuild supports TS decorators.
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   },
   "files": ["custom.d.ts"],
   "include": ["src"],

@@ -1,13 +1,8 @@
-<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
 <!doctype html>
 <html>
   <head>
-    <!-- <script src="/assets/office-js/office.js"></script> -->
+    <script src="/assets/office-js/office.js"></script>
     <!-- <link rel="stylesheet" href="/assets/shoelace/themes/light.css" /> -->
-    <script
-      src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"
-      type="text/javascript"
-    ></script>
 
     <script type="module" src="/taskpane.ts"></script>
     <style>
@@ -37,81 +32,13 @@
 
   <body>
     <div class="container">
-      <div class="toolbar">
-        <sl-button size="small" id="updateButton">
-          <sl-icon slot="prefix" name="arrow-clockwise"></sl-icon>
-          Update
-        </sl-button>
+      <org-chart-toolbar id="toolbar"></org-chart-toolbar>
 
-        <sl-dropdown id="exportDropdown">
-          <sl-button size="small" slot="trigger" caret>
-            <sl-icon slot="prefix" name="download"></sl-icon>
-            Export
-          </sl-button>
-          <sl-menu class="menu">
-            <sl-menu-item id="exportPng">PNG</sl-menu-item>
-            <sl-menu-item id="exportSvg">SVG</sl-menu-item>
-            <sl-menu-item id="exportPdf">PDF...</sl-menu-item>
-          </sl-menu>
-        </sl-dropdown>
+      <org-chart-dialog id="dialog"></org-chart-dialog>
+      <div id="dataDialog"></div>
 
-        <sl-button size="small" id="printButton">
-          <sl-icon slot="prefix" name="printer"></sl-icon>
-          Print
-        </sl-button>
-        <sl-button size="small" id="fitButton">
-          <sl-icon slot="prefix" name="arrows-angle-expand"></sl-icon>
-          Fit
-        </sl-button>
-        <sl-button size="small" id="expandButton">
-          <sl-icon slot="prefix" name="plus-lg"></sl-icon>
-          Expand all
-        </sl-button>
-      </div>
-
-      <sl-dialog label="Export PDF" id="exportPdfDialog">
-        To export to PDF, select "Print" and select "Save as PDF" in your
-        browser's print options.
-        <sl-button
-          slot="footer"
-          variant="primary"
-          id="exportPdfDialogPrintButton"
-          >Print</sl-button
-        >
-        <sl-button slot="footer" id="exportPdfDialogCloseButton"
-          >Close</sl-button
-        >
       </sl-dialog>
-      <sl-dialog label="Insert template" id="templateDataDialog">
-        To get started, insert a template table for entering your org chart
-        data. The table will be added at the currently selected cell.
-        <div id="templateDataDialogError"></div>
-        <sl-button
-          slot="footer"
-          variant="primary"
-          id="templateDataDialogInsertButton"
-          >Insert</sl-button
-        >
-      </sl-dialog>
-      <sl-dialog label="Error updating chart" id="chartErrorDialog">
-        There is a problem with the data in your chart. Each row should have a
-        unique "ID" and a "Manager ID" that corresponds to a unique ID of
-        another entry in the data. Exactly one person should have no "ID" which
-        indicates they are the head of the organisation.
-        <div id="chartErrorDialogMessage"></div>
-        <sl-button
-          slot="footer"
-          variant="primary"
-          id="chartErrorDialogRetryButton"
-          >Retry</sl-button
-        >
-      </sl-dialog>
-
-      <div class="chart-container"></div>
-    </div>
-    <div class="helper-elements">
-      <div id="font-resizer"></div>
-      <iframe style="visibility: hidden" id="print"></iframe>
+      <org-chart id="orgChart"></org-chart>
     </div>
   </body>
 </html>

@@ -22,6 +22,7 @@
         "allowNumber": false
       }
     ],
+    "no-extra-boolean-cast": "off",
     "no-restricted-syntax": [
       "error",
       {
