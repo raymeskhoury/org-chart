@@ -493,7 +493,7 @@ export class DataDialogElement extends LitElement {
         <div id="error">${this.errorMessage}</div>
 
         <sl-button @click="${this.onOk}" slot="footer" variant="primary" id="ok"
-          >Close</sl-button
+          >Update</sl-button
         >
       </div>
     </sl-dialog>`;
