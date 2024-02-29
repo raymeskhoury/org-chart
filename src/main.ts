@@ -144,7 +144,7 @@ export class ToolbarElement extends LitElement {
               );
               if (result) {
                 chartElement.exportImage(
-                  OrgChartElementExportType.Print,
+                  OrgChartElementExportType.Pdf,
                   isInOfficeDesktop
                 );
               }

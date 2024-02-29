@@ -72,21 +72,26 @@ function print(
   openNewWindow: boolean,
   iframe: HTMLIFrameElement,
   width: number,
-  height: number
+  height: number,
+  toPdf: boolean
 ): void {
   const src = `
       <html>
       <head>
       <style>
         @media print {
-          @page {size: ${width > height ? "landscape" : "portrait"}}
+          @page {size: ${width > height ? "landscape" : "portrait"}; ${
+            toPdf ? "margin: 0mm;" : ""
+          }}
           .svg-chart-container {
-            height: 98vh; 
+            height: 100%;
             width: 100%;
             page-break-after:always
           }
+          html, body {
+            height: 98%;
+          }
         }
-    }
       </style>
       <script>
         window.addEventListener("load", () => {
@@ -178,6 +183,7 @@ export enum OrgChartElementExportType {
   Svg,
   Png,
   Print,
+  Pdf,
 }
 
 @customElement("org-chart")
@@ -429,7 +435,18 @@ export class OrgChartElement extends LitElement {
             openNewWindow,
             this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
             width,
-            height
+            height,
+            false
+          );
+          break;
+        case OrgChartElementExportType.Pdf:
+          print(
+            url,
+            openNewWindow,
+            this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
+            width,
+            height,
+            true
           );
           break;
       }
