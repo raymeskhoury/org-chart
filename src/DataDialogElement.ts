@@ -56,6 +56,9 @@ export class InputElementRow extends MobxLitElement {
   @property({attribute: false})
   orgChartDataEntry?: OrgChartEntry;
 
+  @property({attribute: false})
+  colors: string[] = [];
+
   constructor() {
     super();
     makeObservable(this);
@@ -108,6 +111,7 @@ export class InputElementRow extends MobxLitElement {
           size="small"
           ?hoist=${false}
           value="${this.orgChartDataEntry!.color}"
+          .swatches=${this.colors}
           @sl-input="${action((e: CustomEvent) => {
             this.orgChartDataEntry!.color = (e.target as SlColorPicker).value;
           })}"
@@ -217,7 +221,9 @@ export class InputElement extends MobxLitElement {
             ></sl-icon-button>
           </div>
             <org-chart-input-row
-              .orgChartDataEntry=${this.orgChartData.data[i]}
+              .orgChartDataEntry=${
+                this.orgChartData.data[i]
+              } .colors=${this.orgChartData!.getColors()}
             ></org-chart-input-row>
           </div>
         </div>

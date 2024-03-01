@@ -10,7 +10,7 @@ import "@shoelace-style/shoelace/dist/themes/dark.css";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import {setBasePath} from "@shoelace-style/shoelace/dist/utilities/base-path";
 import {LitElement, css, html} from "lit";
-import {customElement} from "lit/decorators.js";
+import {customElement, property} from "lit/decorators.js";
 import {configure} from "mobx";
 import Papa from "papaparse";
 import "./DataDialogElement";
@@ -72,6 +72,9 @@ export class ToolbarElement extends LitElement {
   `;
   private dropdown?: SlDropdown;
 
+  @property({type: Boolean})
+  isInOffice = false;
+
   protected override firstUpdated(): void {
     this.dropdown = this.shadowRoot!.getElementById(
       "exportDropdown"
@@ -84,7 +87,7 @@ export class ToolbarElement extends LitElement {
 
   protected override render(): unknown {
     return html`<div class="toolbar">
-      ${isInOffice
+      ${this.isInOffice
         ? html`<sl-button
             size="small"
             @click=${() => {
@@ -218,6 +221,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       isInOffice &&
       (info.platform !== Office.PlatformType.OfficeOnline ||
         window.location.search === "?excelDesktop");
+    toolbar.isInOffice = isInOffice;
     if (isInOffice) {
       let csv = "";
 

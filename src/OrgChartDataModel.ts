@@ -144,4 +144,12 @@ export class OrgChartDataModel {
     this.data = data;
     return "";
   }
+
+  getColors(): string[] {
+    const result = new Set<string>();
+    for (const entry of this.data) {
+      result.add(entry.color);
+    }
+    return Array.from(result);
+  }
 }
