@@ -26,7 +26,6 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false
   },
-  "files": ["custom.d.ts"],
   "include": ["src"],
   "references": [{"path": "./tsconfig.node.json"}],
   "max-line-length": [

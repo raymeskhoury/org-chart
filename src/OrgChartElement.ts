@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import {OrgChart} from "d3-org-chart";
+import {elementToSVG} from "dom-to-svg";
 import {LitElement, css, html} from "lit-element";
 import {customElement} from "lit/decorators.js";
 import {OrgChartEntry} from "./OrgChartDataModel";
@@ -278,14 +279,16 @@ export class OrgChartElement extends LitElement {
         );
         function nodeHtml(size: number): string {
           return `
-                <div style='width:${a.width}px;height:${d.height}px;' >
-                  <div style="display: flex; flex-direction:column; justify-content: center;  font-family: 'Inter', sans-serif;background-color:${color};  width:${
+                <div class="node-html-container" style='width:${
+                  a.width
+                }px;height:${d.height}px;' >
+                  <div style="display: flex; flex-direction:column; justify-content: center; font-family: 'Arial', sans-serif;background-color:${color};  width:${
                     a.width - 4
                   }px; height: ${
                     d.height - 4
                   }px;border-radius:10px;border: 2px solid #000000; position:relative;">
-                    <div style="padding: 5px 8px 5px 10px;overflow:hidden;">
-                    <div style="font-size: ${size}px;color:${fontColor}; font-weight: 500;">  ${
+                    <div style="padding: 5px 8px 5px 10px;">
+                    <div style="font-size: ${size}px;color:${fontColor}; font-weight: 500;">${
                       a.data.name
                     } </div>
                     <div style="color:${fontColor};margin-top:3px;font-size:15px;"> ${
@@ -295,10 +298,11 @@ export class OrgChartElement extends LitElement {
                   </div>
                 </div>`;
         }
+        const resizer = this.shadowRoot!.getElementById("font-resizer");
+
         if (fontSize === undefined) {
           fontSize = 25;
 
-          const resizer = this.shadowRoot!.getElementById("font-resizer");
           resizer!.innerHTML = nodeHtml(fontSize);
           while (
             doesOverflow(
@@ -331,9 +335,11 @@ export class OrgChartElement extends LitElement {
               } </span></div>
           `;
         }
-        return `<div style="border:1px solid #000000;border-radius:3px;padding: 3px 5px 1px 5px;font-size:12px;margin:auto auto;background-color:white"> ${top(
+        const resultHtml = `<div class="node-button-container" style="font-family: 'Arial', sans-serif; border:1px solid #000000;border-radius:3px;padding: 3px 5px 1px 5px;font-size:12px;margin:auto auto;background-color:white"> ${top(
           node.children !== undefined && node.children !== null
         )}  </div>`;
+
+        return resultHtml;
       })
       // @ts-ignore
       .container(this.containerElement)
@@ -416,6 +422,11 @@ export class OrgChartElement extends LitElement {
       );
       cloned.setAttribute("width", String(width));
       cloned.setAttribute("height", String(height));
+
+      if (type === OrgChartElementExportType.Svg) {
+        this.removeForeignObjects(cloned);
+      }
+
       const serializer = new XMLSerializer();
       let src = serializer.serializeToString(cloned);
       src = '<?xml version="1.0" standalone="no"?>\r\n' + src;
@@ -456,7 +467,6 @@ export class OrgChartElement extends LitElement {
   }
 
   public fit(): void {
-    this.chart.render();
     this.chart.fit();
   }
 
@@ -464,10 +474,93 @@ export class OrgChartElement extends LitElement {
     this.chart.expandAll();
   }
 
+  private removeForeignObjects(cloned: HTMLElement): void {
+    const svgConversionFrame = this.shadowRoot!.getElementById(
+      "svg"
+    ) as HTMLIFrameElement;
+    svgConversionFrame.contentWindow!.document.body.style.margin = "0";
+
+    let nodes = cloned.getElementsByClassName("node-html-container");
+    const replacementMap = new Map<HTMLElement, SVGGElement>();
+    for (const node of nodes) {
+      svgConversionFrame.contentWindow!.document.body.innerHTML =
+        node.parentElement!.innerHTML;
+
+      const svgDocument = elementToSVG(
+        svgConversionFrame.contentWindow!.document.body
+      );
+
+      const toReplace = node.parentElement!.parentElement!;
+      const replacemenet = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "g"
+      );
+
+      replacemenet.setAttribute("width", toReplace.getAttribute("width")!);
+      replacemenet.setAttribute("height", toReplace.getAttribute("height")!);
+      replacemenet.setAttribute("x", toReplace.getAttribute("x")!);
+      replacemenet.setAttribute("y", toReplace.getAttribute("y")!);
+      replacemenet.setAttribute("style", toReplace.getAttribute("style")!);
+      replacemenet.innerHTML =
+        svgDocument.firstElementChild!.getElementsByClassName(
+          "node-html-container"
+        )[0]!.innerHTML;
+      replacementMap.set(toReplace, replacemenet);
+    }
+
+    nodes = cloned.getElementsByClassName("node-button-container");
+    for (const node of nodes) {
+      svgConversionFrame.contentWindow!.document.body.innerHTML =
+        node.parentElement!.innerHTML;
+      (
+        svgConversionFrame.contentWindow!.document.body
+          .firstElementChild! as HTMLElement
+      ).style.display = "inline-block";
+
+      const svgDocument = elementToSVG(
+        svgConversionFrame.contentWindow!.document.body
+      );
+
+      const rect = (
+        svgConversionFrame.contentWindow!.document.getElementsByClassName(
+          "node-button-container"
+        )[0] as HTMLElement
+      ).getBoundingClientRect();
+
+      const toReplace = node.parentElement!.parentElement!;
+      const replacemenet = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "g"
+      );
+
+      replacemenet.setAttribute("width", String(rect.width));
+      replacemenet.setAttribute("height", String(rect.height));
+      replacemenet.setAttribute(
+        "transform",
+        `translate(${rect.width / -2},${rect.height / -2})`
+      );
+      replacemenet.setAttribute("style", toReplace.getAttribute("style")!);
+      replacemenet.innerHTML =
+        svgDocument.firstElementChild!.getElementsByClassName(
+          "node-button-container"
+        )[0]!.innerHTML;
+      replacementMap.set(toReplace, replacemenet);
+    }
+
+    for (const [key, value] of replacementMap) {
+      key.replaceWith(value);
+    }
+
+    for (const node of cloned.getElementsByTagName("tspan")) {
+      node.removeAttribute("textLength");
+    }
+  }
+
   override render(): unknown {
     return html` <div class="chart-container"></div>
       <div class="helper-elements">
         <div id="font-resizer"></div>
+        <iframe id="svg"></iframe>
         <iframe id="print"></iframe>
       </div>`;
   }
