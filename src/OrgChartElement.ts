@@ -376,94 +376,93 @@ export class OrgChartElement extends LitElement {
     const xlinkns = "http://www.w3.org/1999/xlink";
     const svgns = "http://www.w3.org/2000/svg";
 
-    const oldDuration = this.chart.duration();
-    this.chart.duration(0);
-    this.chart.expandAll();
-    this.chart.fit({animate: false});
+    const chartElement = svg.getElementsByClassName("chart")[0];
+    const chartElementTransform = chartElement.getAttribute("transform");
+    chartElement.removeAttribute("transform");
 
-    setTimeout(() => {
-      const elements = svg.getElementsByClassName("node-foreign-object-div");
-      let minX;
-      let minY;
-      let maxX;
-      let maxY;
-      for (const element of elements) {
-        const rect = element.getBoundingClientRect();
-        if (minX === undefined || rect.x < minX) {
-          minX = rect.x - 5;
-        }
-        if (minY === undefined || rect.y < minY) {
-          minY = rect.y - 5;
-        }
-        if (maxX === undefined || rect.right > maxX) {
-          maxX = rect.right + 10;
-        }
-        if (maxY === undefined || rect.bottom > maxY) {
-          maxY = rect.bottom + 10;
-        }
+    const elements = svg.getElementsByClassName("node-foreign-object-div");
+    let minX;
+    let minY;
+    let maxX;
+    let maxY;
+    for (const element of elements) {
+      const rect = element.getBoundingClientRect();
+      if (minX === undefined || rect.x < minX) {
+        minX = rect.x - 5;
       }
-      const svgRect = svg.getBoundingClientRect();
-
-      minX = minX! - svgRect.x;
-      minY = minY! - svgRect.y;
-      maxX = maxX! - svgRect.x;
-      maxY = maxY! - svgRect.y;
-      console.error(minX + " " + maxX + " " + minY + " " + maxY);
-      const width = maxX - minX;
-      const height = maxY - minY;
-
-      const cloned = svg.cloneNode(true) as HTMLElement;
-      cloned.setAttributeNS(xmlns, "xmlns", svgns);
-      cloned.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
-
-      cloned.setAttribute(
-        "viewBox",
-        minX + " " + minY + " " + width + " " + height
-      );
-      cloned.setAttribute("width", String(width));
-      cloned.setAttribute("height", String(height));
-
-      if (type === OrgChartElementExportType.Svg) {
-        this.removeForeignObjects(cloned);
+      if (minY === undefined || rect.y < minY) {
+        minY = rect.y - 5;
       }
-
-      const serializer = new XMLSerializer();
-      let src = serializer.serializeToString(cloned);
-      src = '<?xml version="1.0" standalone="no"?>\r\n' + src;
-
-      const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src);
-
-      switch (type) {
-        case OrgChartElementExportType.Png:
-          exportPng(url, width, height, openNewWindow);
-          break;
-        case OrgChartElementExportType.Svg:
-          saveAs(url, "orgchart.svg", openNewWindow);
-          break;
-        case OrgChartElementExportType.Print:
-          print(
-            url,
-            openNewWindow,
-            this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
-            width,
-            height,
-            false
-          );
-          break;
-        case OrgChartElementExportType.Pdf:
-          print(
-            url,
-            openNewWindow,
-            this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
-            width,
-            height,
-            true
-          );
-          break;
+      if (maxX === undefined || rect.right > maxX) {
+        maxX = rect.right + 10;
       }
+      if (maxY === undefined || rect.bottom > maxY) {
+        maxY = rect.bottom + 10;
+      }
+    }
+    const svgRect = svg.getBoundingClientRect();
 
-      this.chart.duration(oldDuration);
-    });
+    minX = minX! - svgRect.x;
+    minY = minY! - svgRect.y;
+    maxX = maxX! - svgRect.x;
+    maxY = maxY! - svgRect.y;
+    console.error(minX + " " + maxX + " " + minY + " " + maxY);
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const cloned = svg.cloneNode(true) as HTMLElement;
+    chartElement.setAttribute(
+      "transform",
+      chartElementTransform === null ? "" : chartElementTransform
+    );
+    cloned.setAttributeNS(xmlns, "xmlns", svgns);
+    cloned.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+
+    cloned.setAttribute(
+      "viewBox",
+      minX + " " + minY + " " + width + " " + height
+    );
+    cloned.setAttribute("width", String(width));
+    cloned.setAttribute("height", String(height));
+
+    if (type === OrgChartElementExportType.Svg) {
+      this.removeForeignObjects(cloned);
+    }
+
+    const serializer = new XMLSerializer();
+    let src = serializer.serializeToString(cloned);
+    src = '<?xml version="1.0" standalone="no"?>\r\n' + src;
+
+    const url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src);
+
+    switch (type) {
+      case OrgChartElementExportType.Png:
+        exportPng(url, width, height, openNewWindow);
+        break;
+      case OrgChartElementExportType.Svg:
+        saveAs(url, "orgchart.svg", openNewWindow);
+        break;
+      case OrgChartElementExportType.Print:
+        print(
+          url,
+          openNewWindow,
+          this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
+          width,
+          height,
+          false
+        );
+        break;
+      case OrgChartElementExportType.Pdf:
+        print(
+          url,
+          openNewWindow,
+          this.shadowRoot!.getElementById("print")! as HTMLIFrameElement,
+          width,
+          height,
+          true
+        );
+        break;
+    }
   }
 
   public fit(): void {
@@ -472,6 +471,7 @@ export class OrgChartElement extends LitElement {
 
   public expandAll(): void {
     this.chart.expandAll();
+    this.chart.fit();
   }
 
   private removeForeignObjects(cloned: HTMLElement): void {
